@@ -31,6 +31,5 @@ hh.ru — российский сервис по поиску работы и н
 
 ## Ссылки
 
-
-1. [^1]: https://yadro.ru/stat/HeadHunter/index.html?period=month
-2. [^2]: https://hypestat.com/info/hh.ru
+[^1]: https://yadro.ru/stat/HeadHunter/index.html?period=month
+[^2]: https://hypestat.com/info/hh.ru
