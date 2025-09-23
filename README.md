@@ -161,3 +161,4 @@ hh.ru — российский сервис по поиску работы и н
 [^11]: https://hypestat.com/info/linkedin.com
 [^12]: https://searchanise.io/blog/navigation-vs-search-box/
 [^13]: https://www.businessofapps.com/data/linkedin-statistics/
+[^14]: https://stats.hh.ru/moscow
