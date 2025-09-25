@@ -1,5 +1,3 @@
-<img width="66" height="17" alt="image" src="https://github.com/user-attachments/assets/0bef7e99-9c34-4955-ac34-ded7c89301a3" /># hh.ru
-
 ## 1. Тема и целевая аудитория
 
 hh.ru — российский сервис по поиску работы и найму
