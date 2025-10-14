@@ -207,9 +207,7 @@ hh.ru — российский сервис по поиску работы и н
 
 ## 5. Логическая схема БД
 
-<img width="1347" height="689" alt="image" src="https://github.com/user-attachments/assets/1ff332b4-4042-40d2-98b1-226a8709b255" />
-
-
+<img width="1647" height="769" alt="image" src="https://github.com/user-attachments/assets/bb009d61-bee4-438f-8f2d-d2ead7e9017b" />
 
 
 ### Описание таблиц
