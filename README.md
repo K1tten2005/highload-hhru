@@ -316,7 +316,11 @@ hh.ru — российский сервис по поиску работы и н
 ### Выбор БД
 
 - PostgreSQL: храним все данные в PostgreSQL
-- ElasticSearch: используем для поиска по вакансиям: title, description, location, salary, category, company_name. 
+- ElasticSearch: используем для поиска по вакансиям: title, description, location, salary, category, company_name.
+
+### Репликация
+
+- Учитывая высокую интенсивность чтения будем использовать 1 primary (на который будет направляться все нагрузка по write действиям, после чего ) и 2 read-only replicas (будут обрабатывать операции чтения). 
 
 
 
