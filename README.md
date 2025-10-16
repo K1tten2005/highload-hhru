@@ -313,7 +313,10 @@ hh.ru — российский сервис по поиску работы и н
 
 - messages: делаем партиционирование по датам отправки сообщений (поле `sent_at`)
 
+### Выбор БД
 
+- PostgreSQL: храним все данные в PostgreSQL
+- ElasticSearch: используем для поиска по вакансиям: title, description, location, salary, category, company_name. 
 
 
 
