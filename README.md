@@ -281,6 +281,42 @@ hh.ru — российский сервис по поиску работы и н
 
 
 
+  ## 6. Физическая схема БД
+
+  <img width="1622" height="824" alt="image" src="https://github.com/user-attachments/assets/429f7220-f210-4782-8c74-10612692e86e" />
+
+### Денормализация
+| Таблица        | Денормализованные поля                                  | Комментарий |
+|----------------|----------------------------------------------------------|-------------|
+| `vacancies`    | `company_name`, `company_logo_url`, `company_location`   | Устраняет JOIN с таблицей `companies` при отображении списка вакансий. |
+| `resumes`      | `candidate_name`                                         | Позволяет отображать резюме без JOIN к `users`. Полезно при просмотре резюме рекрутером. |
+| `applications` | `vacancy_title`, `company_name`, `candidate_name`, `resume_title` | Полностью исключает необходимость JOIN’ов при отображении ленты откликов как для кандидатов, так и для рекрутеров. |
+| `messages`     | `sender_name`, `receiver_name`                           | Избавляет от двух JOIN’ов к `users` при загрузке чата. Имена фиксируются на момент отправки. |
+
+
+### Индексы
+
+| Таблица             | Индекс                                                                 | Комментарий |
+|---------------------|------------------------------------------------------------------------|-------------|
+| `vacancies`         | `(is_active, is_deleted, created_at DESC)`                             | Основной индекс для ленты активных вакансий. Частичный индекс по условию `is_active = true AND is_deleted = false`. |
+| `vacancies`         | `(location, is_active, is_deleted, created_at DESC)`                   | Ускоряет поиск вакансий по расположению. |
+| `vacancies`         | `(category, is_active, is_deleted, created_at DESC)`                   | Поддержка фильтрации по категории. |
+| `vacancies`         | `(company_id, is_active, is_deleted, created_at DESC)`                 | Для рекрутеров отображение своих вакансий. |
+| `vacancies`         | `(recruiter_id, is_deleted, created_at DESC)`                          | Резервный индекс для управления вакансиями по рекрутеру. |
+| `applications`      | `(candidate_id, status, is_deleted, created_at DESC)`                  | "Мои отклики" — для кандидатов. |
+| `applications`      | `(vacancy_id, status, is_deleted, created_at DESC)`                    | Отклики на конкретную вакансию — для рекрутеров. |
+| `messages`          | `(application_id, sent_at ASC)`                                        | Загрузка переписки в чате. |
+| `resumes`           | `(candidate_id, is_deleted, created_at DESC)`                          | Отображение списка резюме кандидата. |
+
+
+### Партиционирование
+
+- messages: делаем партиционирование по датам отправки сообщений (поле `sent_at`)
+
+
+
+
+
 
 ## Ссылки
 
