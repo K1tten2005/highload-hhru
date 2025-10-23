@@ -381,7 +381,7 @@ hh.ru — российский сервис по поиску работы и н
 
 - PostgreSQL: храним все данные в PostgreSQL
 - ElasticSearch:
-   - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `category`, `salary_from`, `salary_to`, `is_active`, `created_at`, `is_deleted`.
+   - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `salary_from`, `salary_to`, `location`, `category`, `is_active`, `created_at`, `is_deleted`.
    - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `created_at`, `is_deleted`.
 
 ### Репликация
