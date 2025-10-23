@@ -296,7 +296,7 @@ hh.ru — российский сервис по поиску работы и н
 | `vacancies`    | `company_name`, `company_logo_url`, `company_location`   | Устраняет JOIN с таблицей `companies` при отображении списка вакансий. |
 | `resumes`      | `candidate_name`                                         | Позволяет отображать резюме без JOIN к `users`. Полезно при просмотре резюме рекрутером. |
 | `applications` | `vacancy_title`, `company_name`, `candidate_name`, `resume_title` | Полностью исключает необходимость JOIN’ов при отображении ленты откликов как для кандидатов, так и для рекрутеров. |
-| `messages`     | `sender_name`, `receiver_name`                           | Избавляет от двух JOIN’ов к `users` при загрузке чата. Имена фиксируются на момент отправки. |
+| `messages`     | `sender_name`, `sender_name`, `company_name`, `company_logo_url`  | Избавляет от JOIN’ов к `users` и `companies` при загрузке чата.|
 
 
 ### Индексы
@@ -318,10 +318,30 @@ hh.ru — российский сервис по поиску работы и н
 
 - messages: делаем партиционирование по датам отправки сообщений (поле `sent_at`)
 
+### Подсчёт весов таблиц
+
+- users:
+  - 1 строка: 8 + 40 + 60 + 60 + 10 + 30 + 8 + 8 + 1 = 225 байт
+- companies:
+  - 1 строка: 8 + 40 + 200 + 60 + 40 + 60 + 8 + 8 + 1 = 425 байт
+    
+- company_recruiters:
+  - 1 строка: 8 + 8 + 8 + 40 + 60 + 10 + 8 = 142 байта
+- vacancies:
+  - 1 строка: 8 + 8 + 8 + 40 + 60 + 40 + 60 + 300 + 4 + 4 + 20 + 40 + 8 + 8 + 1 + 1 = 610 байт
+- resumes:
+  - 1 строка: 8 + 8 + 30 + 200 + 300 + 40 + 200 + 8 + 8 + 1 = 803 байта
+- applications:
+  - 1 строка: 8 + 8 + 8 + 8 + 60 + 40 + 40 + 40 + 10 + 8 + 8 + 200 + 1 + 1 = 480 байт
+- messages:
+  - 1 строка: 8 + 8 + 8 + 30 + 10 + 8 + 40 + 60 + 300 + 8 + 8 + 1 = 489 байт
+
 ### Выбор БД
 
 - PostgreSQL: храним все данные в PostgreSQL
-- ElasticSearch: используем для поиска по вакансиям: title, description, location, salary, category, company_name.
+- ElasticSearch:
+   - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `category`, `salary_from`, `salary_to`, `is_active`, `created_at`, `is_deleted`.
+   - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `created_at`, `is_deleted`.
 
 ### Репликация
 
