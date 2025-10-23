@@ -308,7 +308,7 @@ hh.ru — российский сервис по поиску работы и н
 | `vacancies`         | `(location, is_active, is_deleted, created_at DESC)`                   | Ускоряет поиск вакансий по расположению. |
 | `vacancies`         | `(category, is_active, is_deleted, created_at DESC)`                   | Поддержка фильтрации по категории. |
 | `vacancies`         | `(company_id, is_active, is_deleted, created_at DESC)`                 | Для рекрутеров отображение своих вакансий. |
-| `vacancies`         | `(recruiter_id, is_deleted, created_at DESC)`                          | Резервный индекс для управления вакансиями по рекрутеру. |
+| `vacancies`         | `(recruiter_id, is_deleted, created_at DESC)`                          | Индекс для управления вакансиями по рекрутеру. |
 | `applications`      | `(candidate_id, status, is_deleted, created_at DESC)`                  | "Мои отклики" — для кандидатов. |
 | `applications`      | `(vacancy_id, status, is_deleted, created_at DESC)`                    | Отклики на конкретную вакансию — для рекрутеров. |
 | `messages`          | `(application_id, sent_at ASC)`                                        | Загрузка переписки в чате. |
