@@ -313,6 +313,33 @@ hh.ru — российский сервис по поиску работы и н
 | `messages`          | `(application_id, sent_at ASC)`                                        | Загрузка переписки в чате. |
 | `resumes`           | `(candidate_id, is_deleted, created_at DESC)`                          | Отображение списка резюме кандидата. |
 
+### Подсчёт весов индексов
+
+- vacancies:
+   - `id`: 8 * 1 217 000 = 9 Мб
+   - `(is_active, is_deleted, created_at DESC)`: 24 * 1 217 000 = 27 Мб
+   - `(location, is_active, is_deleted, created_at DESC)`: 32 * 1 217 000 = 37 Мб
+   - `(category, is_active, is_deleted, created_at DESC)`: 32 * 1 217 000 = 37 Мб
+   - `(company_id, is_active, is_deleted, created_at DESC)`: 32 * 1 217 000 = 37 Мб
+   - `(recruiter_id, is_deleted, created_at DESC)`: 24 * 1 217 000 = 27 Мб
+   - **Сумма**: 174 Мб
+
+- applications:
+   - `id`: 8 * 
+   - `(candidate_id, status, is_deleted, created_at DESC)`: 32 * 
+   - `(vacancy_id, status, is_deleted, created_at DESC)`: 32 * 
+   - **Сумма**:  Мб
+
+- messages:
+   - `id`: 8 * 
+   - `(application_id, sent_at ASC)`: 16 * 
+   - **Сумма**:  Мб
+
+- resumes:
+   - `id`: 8 * 
+   - `(candidate_id, is_deleted, created_at DESC)` : 24 * 
+   - **Сумма**:  Мб
+
 
 ### Партиционирование
 
@@ -348,6 +375,7 @@ hh.ru — российский сервис по поиску работы и н
   - 1 строка: 8 + 8 + 8 + 30 + 10 + 8 + 40 + 60 + 300 + 8 + 8 + 1 = 489 байт
   - Всего: ...
 
+
 ### Выбор БД
 
 - PostgreSQL: храним все данные в PostgreSQL
@@ -357,7 +385,7 @@ hh.ru — российский сервис по поиску работы и н
 
 ### Репликация
 
-- Учитывая высокую интенсивность чтения будем использовать 1 primary (на который будет направляться все нагрузка по write действиям, после чего ) и 2 read-only replicas (будут обрабатывать операции чтения). 
+- Учитывая высокую интенсивность чтения будем использовать 1 primary (на который будет направляться все нагрузка по write действиям) и 1 read-only (будет обрабатывать операции чтения). 
 
 
 
