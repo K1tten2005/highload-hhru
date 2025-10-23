@@ -383,11 +383,11 @@ hh.ru — российский сервис по поиску работы и н
 - ElasticSearch:
    - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `salary_from`, `salary_to`, `location`, `category`, `is_active`, `created_at`, `is_deleted`.
    - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `created_at`, `is_deleted`.
+- В качестве S3 хранилища будем использовать Minio для хранения фотографий
 
 ### Репликация
 
 - Учитывая высокую интенсивность чтения будем использовать 1 primary (на который будет направляться все нагрузка по write действиям) и 1 read-only (будет обрабатывать операции чтения). 
-
 
 
 
