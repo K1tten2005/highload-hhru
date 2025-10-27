@@ -305,7 +305,6 @@ hh.ru — российский сервис по поиску работы и н
 | Таблица             | Индекс                                                                 | Комментарий |
 |---------------------|------------------------------------------------------------------------|-------------|
 | `vacancies`         | `(is_active, is_deleted, created_at DESC)`                             | Основной индекс для ленты активных вакансий. Частичный индекс по условию `is_active = true AND is_deleted = false`. |
-| `vacancies`         | `(location, is_active, is_deleted, created_at DESC)`                   | Ускоряет поиск вакансий по расположению. |
 | `vacancies`         | `(category, is_active, is_deleted, created_at DESC)`                   | Поддержка фильтрации по категории. |
 | `vacancies`         | `(company_id, is_active, is_deleted, created_at DESC)`                 | Для рекрутеров отображение своих вакансий. |
 | `vacancies`         | `(recruiter_id, is_deleted, created_at DESC)`                          | Индекс для управления вакансиями по рекрутеру. |
@@ -319,27 +318,26 @@ hh.ru — российский сервис по поиску работы и н
 - vacancies:
    - `id`: 8 * 1 217 000 = 9 Мб
    - `(is_active, is_deleted, created_at DESC)`: 24 * 1 217 000 = 27 Мб
-   - `(location, is_active, is_deleted, created_at DESC)`: 32 * 1 217 000 = 37 Мб
    - `(category, is_active, is_deleted, created_at DESC)`: 32 * 1 217 000 = 37 Мб
    - `(company_id, is_active, is_deleted, created_at DESC)`: 32 * 1 217 000 = 37 Мб
    - `(recruiter_id, is_deleted, created_at DESC)`: 24 * 1 217 000 = 27 Мб
-   - **Сумма**: 174 Мб
+   - **Сумма**: 137 Мб
 
 - applications:
-   - `id`: 8 * 
-   - `(candidate_id, status, is_deleted, created_at DESC)`: 32 * 
-   - `(vacancy_id, status, is_deleted, created_at DESC)`: 32 * 
-   - **Сумма**:  Мб
+   - `id`: 8 * (490238 * 365 * 25 (hh.ru стал работать в 2000 году [^22]))/2 = 16,7 Гб
+   - `(candidate_id, status, is_deleted, created_at DESC)`: 32 * (490238 * 365 * 25)/2 = 66,7 Гб
+   - `(vacancy_id, status, is_deleted, created_at DESC)`: 32 * (490238 * 365 * 25)/2 = 66,7 Гб
+   - **Сумма**: 150,1 Гб
 
 - messages:
-   - `id`: 8 * 
-   - `(application_id, sent_at ASC)`: 16 * 
-   - **Сумма**:  Мб
+   - `id`: 8 * (1,7 * 2 100 000 * 365 * 4 (чат в hh.ru появлися в 2021 году [^23]))/2 = 19,4 Гб
+   - `(application_id, sent_at ASC)`: 16 * (1,7 * 2 100 000 * 365 * 4)/2 = 38,8 Гб
+   - **Сумма**:  
 
 - resumes:
-   - `id`: 8 * 
-   - `(candidate_id, is_deleted, created_at DESC)` : 24 * 
-   - **Сумма**:  Мб
+   - `id`: 8 * 88 000 000 = 671 Мб
+   - `(candidate_id, is_deleted, created_at DESC)` : 24 * 88 000 000 = 2 Гб
+   - **Сумма**: 2,6 Гб
 
 
 ### Партиционирование
@@ -370,19 +368,19 @@ hh.ru — российский сервис по поиску работы и н
 
 - applications:
   - 1 строка: 8 + 8 + 8 + 8 + 60 + 40 + 40 + 40 + 10 + 8 + 8 + 200 + 1 + 1 = 480 байт
-  - Всего: ...
+  - Всего: 480 * (490238 * 365 * 25 (hh.ru стал работать в 2000 году [^22]))/2 = 999,9 Гб
 
 - messages:
   - 1 строка: 8 + 8 + 8 + 30 + 10 + 8 + 40 + 60 + 300 + 8 + 8 + 1 = 489 байт
-  - Всего: ...
+  - Всего: 489 * (1,7 * 2 100 000 * 365 * 4 (чат в hh.ru появлися в 2021 году [^23]))/2 = 1186,9 Гб
 
 
 ### Выбор БД
 
 - PostgreSQL: храним все данные в PostgreSQL
 - ElasticSearch:
-   - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `salary_from`, `salary_to`, `location`, `category`, `is_active`, `created_at`, `is_deleted`.
-   - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `created_at`, `is_deleted`.
+   - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `salary_from`, `salary_to`, `location`, `category`, `created_at`.
+   - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `updated_at`,.
 - В качестве S3 хранилища будем использовать Minio для хранения фотографий
 
 ### Репликация
@@ -414,3 +412,5 @@ hh.ru — российский сервис по поиску работы и н
 [^19]: https://resume.co/blog/update-resume
 [^20]: https://www.msk-ix.ru/
 [^21]: https://ruvds.com/ru-rub#advantages
+[^22]: https://ru.wikipedia.org/wiki/HeadHunter
+[^23]: https://hh.ru/article/28697
