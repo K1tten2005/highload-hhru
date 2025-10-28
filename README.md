@@ -356,10 +356,6 @@ hh.ru — российский сервис по поиску работы и н
    - **Сумма**: 2 Гб
 
 
-### Партиционирование
-
-- messages: делаем партиционирование по датам отправки сообщений (поле `sent_at`)
-
 ### Подсчёт весов таблиц
 
 - users:
@@ -398,6 +394,10 @@ hh.ru — российский сервис по поиску работы и н
    - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `salary_from`, `salary_to`, `location`, `category`, `created_at`.
    - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `updated_at`.
 - В качестве S3 хранилища будем использовать Minio для хранения фотографий
+
+### Партиционирование
+
+- messages: делаем партиционирование по датам отправки сообщений (поле `sent_at`)
 
 ### Репликация
 
