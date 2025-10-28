@@ -304,13 +304,17 @@ hh.ru — российский сервис по поиску работы и н
 
 | Таблица             | Индекс                                                                 | Комментарий |
 |---------------------|------------------------------------------------------------------------|-------------|
+| `users`         | `(email, is_deleted)`                   | Поиск по почте пользователя. |
+| `company_recruiters`         | `(recruiter_email, is_deleted)`                   | Поиск по почте рекрутеров. |
+| `company_recruiters`         | `(company_id, role, is_deleted)`                   | Поиск рекрутеров в компании по ролям. |
 | `vacancies`         | `(is_active, is_deleted, created_at DESC)`                             | Основной индекс для ленты активных вакансий. Частичный индекс по условию `is_active = true AND is_deleted = false`. |
 | `vacancies`         | `(category, is_active, is_deleted, created_at DESC)`                   | Поддержка фильтрации по категории. |
 | `vacancies`         | `(company_id, is_active, is_deleted, created_at DESC)`                 | Для рекрутеров отображение своих вакансий. |
 | `vacancies`         | `(recruiter_id, is_deleted, created_at DESC)`                          | Индекс для управления вакансиями по рекрутеру. |
 | `applications`      | `(candidate_id, status, is_deleted, created_at DESC)`                  | "Мои отклики" — для кандидатов. |
 | `applications`      | `(vacancy_id, status, is_deleted, created_at DESC)`                    | Отклики на конкретную вакансию — для рекрутеров. |
-| `messages`          | `(application_id, sent_at ASC)`                                        | Загрузка переписки в чате. |
+| `messages`          | `(application_id, is_deleted, sent_at DESC)`                                        | Загрузка переписки в чате. |
+| `messages`          | `(sender_id, is_deleted, sent_at DESC)`                                        | История сообщений (список чатов) |
 | `resumes`           | `(candidate_id, is_deleted, created_at DESC)`                          | Отображение списка резюме кандидата. |
 
 ### Подсчёт весов индексов
@@ -331,13 +335,25 @@ hh.ru — российский сервис по поиску работы и н
 
 - messages:
    - `id`: 8 * (1,7 * 2 100 000 * 365 * 4 (чат в hh.ru появлися в 2021 году [^23]))/2 = 19,4 Гб
-   - `(application_id, sent_at ASC)`: 16 * (1,7 * 2 100 000 * 365 * 4)/2 = 38,8 Гб
-   - **Сумма**:  
+   - `(application_id, is_deleted, sent_at DESC)`: 24 * (1,7 * 2 100 000 * 365 * 4)/2 = 58,2 Гб
+   - `(sender_id, is_deleted, sent_at DESC)`: 24 * (1,7 * 2 100 000 * 365 * 4)/2 = 58,2 Гб
+   - **Сумма**: 135,8 Гб
 
 - resumes:
    - `id`: 8 * 88 000 000 = 671 Мб
    - `(candidate_id, is_deleted, created_at DESC)` : 24 * 88 000 000 = 2 Гб
    - **Сумма**: 2,6 Гб
+ 
+- company_recruiters:
+   - `id`: 8 * 54 000 000 = 411 Мб
+   - `(recruiter_email, is_deleted)` : 16 * 54 000 000 = 822 Мб
+   - `(company_id, role, is_deleted)` : 24 * 54 000 000 = 1,2 Гб
+   - **Сумма**: 2,4 Гб
+ 
+- users:
+   - `id`: 8 * 88 000 000 = 671 Мб
+   - `(email, is_deleted)` : 16 * 88 000 000 = 1,3 Гб
+   - **Сумма**: 2 Гб
 
 
 ### Партиционирование
@@ -380,7 +396,7 @@ hh.ru — российский сервис по поиску работы и н
 - PostgreSQL: храним все данные в PostgreSQL
 - ElasticSearch:
    - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `salary_from`, `salary_to`, `location`, `category`, `created_at`.
-   - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `updated_at`,.
+   - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `updated_at`.
 - В качестве S3 хранилища будем использовать Minio для хранения фотографий
 
 ### Репликация
