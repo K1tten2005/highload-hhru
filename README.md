@@ -288,7 +288,8 @@ hh.ru — российский сервис по поиску работы и н
 
   ## 6. Физическая схема БД
 
-<img width="1265" height="798" alt="image" src="https://github.com/user-attachments/assets/09765157-639e-4b44-ae68-f90fe38e327b" />
+<img width="2994" height="1608" alt="scheme" src="https://github.com/user-attachments/assets/48cb1255-1220-4b5c-b1bf-051152a4c9d9" />
+
 
 
 ### Денормализация
