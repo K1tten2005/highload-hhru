@@ -432,6 +432,7 @@ hh.ru — российский сервис по поиску работы и н
 
 ## 10. Схема проекта
 
+<img width="1158" height="842" alt="overall_scheme" src="https://github.com/user-attachments/assets/3799a1ce-5f03-4725-a9bd-43f8356db9d4" />
 
 
 ## Ссылки
