@@ -305,56 +305,56 @@ hh.ru — российский сервис по поиску работы и н
 
 | Таблица             | Индекс                                                                 | Комментарий |
 |---------------------|------------------------------------------------------------------------|-------------|
-| `users`         | `(email, is_deleted)`                   | Поиск по почте пользователя. |
-| `company_recruiters`         | `(recruiter_email, is_deleted)`                   | Поиск по почте рекрутеров. |
-| `company_recruiters`         | `(company_id, role, is_deleted)`                   | Поиск рекрутеров в компании по ролям. |
-| `vacancies`         | `(is_active, is_deleted, created_at DESC)`                             | Основной индекс для ленты активных вакансий. Частичный индекс по условию `is_active = true AND is_deleted = false`. |
-| `vacancies`         | `(category, is_active, is_deleted, created_at DESC)`                   | Поддержка фильтрации по категории. |
-| `vacancies`         | `(company_id, is_active, is_deleted, created_at DESC)`                 | Для рекрутеров отображение своих вакансий. |
-| `vacancies`         | `(recruiter_id, is_deleted, created_at DESC)`                          | Индекс для управления вакансиями по рекрутеру. |
-| `applications`      | `(candidate_id, status, is_deleted, created_at DESC)`                  | "Мои отклики" — для кандидатов. |
-| `applications`      | `(vacancy_id, status, is_deleted, created_at DESC)`                    | Отклики на конкретную вакансию — для рекрутеров. |
-| `messages`          | `(application_id, is_deleted, sent_at DESC)`                                        | Загрузка переписки в чате. |
-| `messages`          | `(sender_id, is_deleted, sent_at DESC)`                                        | История сообщений (список чатов) |
-| `resumes`           | `(candidate_id, is_deleted, created_at DESC)`                          | Отображение списка резюме кандидата. |
+| `users`         | `(email)`                   | Поиск по почте пользователя. |
+| `company_recruiters`         | `(recruiter_email)`                   | Поиск по почте рекрутеров. |
+| `company_recruiters`         | `(company_id, role)`                   | Поиск рекрутеров в компании по ролям. |
+| `vacancies`         | `(created_at DESC)`                             | Основной индекс для ленты активных вакансий. Частичный индекс по условию `is_active = true AND is_deleted = false`. |
+| `vacancies`         | `(category, is_active, created_at DESC)`                   | Поддержка фильтрации по категории. |
+| `vacancies`         | `(company_id, created_at DESC)`                 | Для рекрутеров отображение своих вакансий. |
+| `vacancies`         | `(recruiter_id, created_at DESC)`                          | Индекс для управления вакансиями по рекрутеру. |
+| `applications`      | `(candidate_id, status, created_at DESC)`                  | "Мои отклики" — для кандидатов. |
+| `applications`      | `(vacancy_id, status, created_at DESC)`                    | Отклики на конкретную вакансию — для рекрутеров. |
+| `messages`          | `(application_id, sent_at DESC, id DESC)`                                        | Загрузка переписки в чате и списка чатов. |
+| `messages`          | `(company_id, sent_at DESC)`                                        | Список чатов компании |
+| `resumes`           | `(candidate_id, created_at DESC)`                          | Отображение списка резюме кандидата. |
 
 ### Подсчёт весов индексов
 
 - vacancies:
    - `id`: 8 * 1 217 000 = 9 Мб
-   - `(is_active, is_deleted, created_at DESC)`: 24 * 1 217 000 = 27 Мб
-   - `(category, is_active, is_deleted, created_at DESC)`: 32 * 1 217 000 = 37 Мб
-   - `(company_id, is_active, is_deleted, created_at DESC)`: 32 * 1 217 000 = 37 Мб
-   - `(recruiter_id, is_deleted, created_at DESC)`: 24 * 1 217 000 = 27 Мб
-   - **Сумма**: 137 Мб
+   - `(created_at DESC)`: 8 * 1 217 000 = 9 Мб
+   - `(category, created_at DESC)`: 16 * 1 217 000 = 18 Мб
+   - `(company_id, created_at DESC)`: 16 * 1 217 000 = 18 Мб
+   - `(recruiter_id, created_at DESC)`: 16 * 1 217 000 = 18 Мб
+   - **Сумма**: 72 Мб
 
 - applications:
    - `id`: 8 * (490238 * 365 * 25 (hh.ru стал работать в 2000 году [^22]))/2 = 16,7 Гб
-   - `(candidate_id, status, is_deleted, created_at DESC)`: 32 * (490238 * 365 * 25)/2 = 66,7 Гб
-   - `(vacancy_id, status, is_deleted, created_at DESC)`: 32 * (490238 * 365 * 25)/2 = 66,7 Гб
-   - **Сумма**: 150,1 Гб
+   - `(candidate_id, status, created_at DESC)`: 24 * (490238 * 365 * 25)/2 = 50,1 Гб
+   - `(vacancy_id, status, created_at DESC)`: 24 * (490238 * 365 * 25)/2 = 50,1 Гб
+   - **Сумма**: 116,9 Гб
 
 - messages:
    - `id`: 8 * (1,7 * 2 100 000 * 365 * 4 (чат в hh.ru появлися в 2021 году [^23]))/2 = 19,4 Гб
-   - `(application_id, is_deleted, sent_at DESC)`: 24 * (1,7 * 2 100 000 * 365 * 4)/2 = 58,2 Гб
-   - `(sender_id, is_deleted, sent_at DESC)`: 24 * (1,7 * 2 100 000 * 365 * 4)/2 = 58,2 Гб
-   - **Сумма**: 135,8 Гб
+   - `(application_id, sent_at DESC, id DESC)`: 24 * (1,7 * 2 100 000 * 365 * 4)/2 = 58,2 Гб
+   - `(company_id, sent_at DESC)`: 16 * (1,7 * 2 100 000 * 365 * 4)/2 = 38,8 Гб
+   - **Сумма**: 116,4 Гб
 
 - resumes:
    - `id`: 8 * 88 000 000 = 671 Мб
-   - `(candidate_id, is_deleted, created_at DESC)` : 24 * 88 000 000 = 2 Гб
-   - **Сумма**: 2,6 Гб
+   - `(candidate_id, created_at DESC)` : 16 * 88 000 000 = 1,3 Гб
+   - **Сумма**: 2 Гб
  
 - company_recruiters:
    - `id`: 8 * 54 000 000 = 411 Мб
-   - `(recruiter_email, is_deleted)` : 16 * 54 000 000 = 822 Мб
-   - `(company_id, role, is_deleted)` : 24 * 54 000 000 = 1,2 Гб
-   - **Сумма**: 2,4 Гб
+   - `(recruiter_email)` : 8 * 54 000 000 = 411 Мб
+   - `(company_id, role)` : 8 * 54 000 000 = 411 Гб
+   - **Сумма**: 1,2 Гб
  
 - users:
    - `id`: 8 * 88 000 000 = 671 Мб
-   - `(email, is_deleted)` : 16 * 88 000 000 = 1,3 Гб
-   - **Сумма**: 2 Гб
+   - `(email)` : 8 * 88 000 000 = 671 Гб
+   - **Сумма**: 1,3 Гб
 
 
 ### Подсчёт весов таблиц
@@ -390,7 +390,7 @@ hh.ru — российский сервис по поиску работы и н
 
 ### Выбор БД
 
-- PostgreSQL: храним все данные в PostgreSQL
+- PostgreSQL: храним все данные в PostgreSQL. Максимальный размер для одной таблицы - 32 Тб [^24], поэтому Postgres должен справиться с таким объемом данных.
 - ElasticSearch:
    - Поиск по вакансиям: `id`, `company_name`, `company_logo_url`, `company_location`, `title`, `description`, `salary_from`, `salary_to`, `location`, `category`, `created_at`.
    - Поиск по резюме: `id`, `candidate_name`, `skills`, `job_experience`, `title`, `summary`, `updated_at`.
@@ -455,3 +455,4 @@ hh.ru — российский сервис по поиску работы и н
 [^21]: https://ruvds.com/ru-rub#advantages
 [^22]: https://ru.wikipedia.org/wiki/HeadHunter
 [^23]: https://hh.ru/article/28697
+[^24]: https://medium.com/@wasiualhasib/understanding-postgresql-table-structure-maximum-size-file-segmentation-and-row-storage-7c297ee2067f
