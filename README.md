@@ -456,12 +456,27 @@ hh.ru — российский сервис по поиску работы и н
 * При проблемах в поисковом движке отдаются кэшированные результаты популярных запросов.
 * При недостатке ресурсов чат работает в режиме «только текст без вложений», либо временно недоступен — но отклики сохраняются.
 
+
 ## 10. Схема проекта
 
-<img width="1432" height="972" alt="overall_scheme" src="https://github.com/user-attachments/assets/1ca7cdbc-ed71-40d9-9a1a-9a558a8611de" />
+<img width="1431" height="971" alt="overall_scheme" src="https://github.com/user-attachments/assets/c051f5e9-cbda-49ab-a53e-6ef10f1e2a04" />
 
+Основной асинхронный паттерн - Event-driven architecture (EDA). Он выражается во взаимодействии воркеров с kafka, события об определенных действиях пишутся в топики кафки, а воркеры эти топики читают.
 
+## 11. Список сереров
 
+| Действие             | RPS пик | CPU | 
+|----------------------|---------|------------------------|
+| Авторизация                 | 1,4 | users |
+| Регистрация                 | 0,002 | users |
+| Просмотр вакансий           | 2138 | vacancies, companies |
+| Поиск вакансий              | 632 | vacancies, companies| 
+| Публикация вакансий         | 0,02 | vacancies, companies | 
+| Закрытие вакансий           | 0,004 | vacancies, applications | 
+| Отклик на вакансию          | 9,6 | applications, vacancies, resumes | 
+| Ответ на отклик на вакансию | 9,6 | applications, vacancies, resumes | 
+| Использование чата          | 82,6 | users, applications | 
+| Создание резюме             | 0,006 | resumes, skills_resumes, skills |
 
 
 
