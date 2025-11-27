@@ -459,9 +459,12 @@ hh.ru — российский сервис по поиску работы и н
 
 ## 10. Схема проекта
 
-<img width="1431" height="971" alt="overall_scheme" src="https://github.com/user-attachments/assets/c051f5e9-cbda-49ab-a53e-6ef10f1e2a04" />
+<img width="1431" height="971" alt="overall_scheme" src="https://github.com/user-attachments/assets/6ef676d3-5ccf-4409-8192-66d4e3bd268e" />
+
 
 Основной асинхронный паттерн - Event-driven architecture (EDA). Он выражается во взаимодействии воркеров с kafka, события об определенных действиях пишутся в топики кафки, а воркеры эти топики читают.
+* email notification worker - читает из кафки данные, которые в топики пишут сервисы resume и messages. Воркер читает эти топики и делает рассылку писем пользователям в зависимости от информации, прочитанной из топиков
+* search indexing worker - в топики пишется новая информация для обновления в ElasticSearch. Воркер читает и идет обновлять эластик.
 
 ## 11. Список сереров
 
