@@ -489,9 +489,13 @@ hh.ru — российский сервис по поиску работы и н
 - messages: 82,6
 - company_recruiters: 1,4 + 0,002 + 0,02 = 1,422
 
+Из бенчмарка [^25] получаем 4000 qps чтения с записью репликаций на 16 ядер т.е. 250 на ядро.
+
+
+
 | Таблица             | RPS пик | CPU | 
 |---------------------|---------|------------------------|
-| users               | 84 | |
+| users               | 84 |  |
 | companies           | 2770 |  |
 | vacancies           | 2789 |  |
 | applications        | 100 |  | 
@@ -564,3 +568,4 @@ hh.ru — российский сервис по поиску работы и н
 [^22]: https://ru.wikipedia.org/wiki/HeadHunter
 [^23]: https://hh.ru/article/28697
 [^24]: https://medium.com/@wasiualhasib/understanding-postgresql-table-structure-maximum-size-file-segmentation-and-row-storage-7c297ee2067f
+[^25]: https://openbenchmarking.org/result/2510061-NE-2510055NE79#r-7e3cefef86b702f438318e5f7cc7938646057dc9
