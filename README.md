@@ -549,6 +549,8 @@ Minio: 4445 ГБ (фото в компаниях) + 406 Гб (фото в вак
 | Cоздание резюме          | 0,006    | среднее           | 1                 | 1               |
 | **Итого**      | **2873**          | -                 | **15/0,4 = 37,5** | **4,8/0,4 = 12** |
 
+### Расходы
+
 На 1 ДЦ приходится:
 * 70 (БД) + 13 (сервисы) = 83 CPU
 * 600 Гб (индексы) + 12 Гб (сервисы) = 612 Гб ОЗУ
@@ -603,4 +605,3 @@ Minio: 4445 ГБ (фото в компаниях) + 406 Гб (фото в вак
 [^27]: https://serverflow.ru/catalog/komplektuyushchie/ssd-nakopiteli/kioxia-cd8p-v-12-8tb/
 [^28]: https://serverflow.ru/catalog/komplektuyushchie/operativnaya-pamyat/32gb-ddr5-ecc-reg-micron-5600mhz-2rx4/
 [^29]: https://selectel.ru/services/dedicated/?tab=configurator&c=397%3A2-54%3A16-141%3A6-130%3A1-126%3A2-96%3A1-313%3A1-391%3A1-392%3A1&simpleRamMode=true
-[^30]: https://selectel.ru/services/colocation/server-rack/
